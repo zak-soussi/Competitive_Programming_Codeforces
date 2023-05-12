@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+#pragma GCC target("bmi,bmi2,lzcnt,popcnt")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+typedef long long ll;
+typedef long double ld;
+const char nl='\n';
+const int infiniint=INT_MAX;
+const ll infinill=LONG_LONG_MAX;
+using namespace std;
+ll power_no_mod(ll a, ll b) {
+    ll result = 1;
+    while (b) {
+        if (b&1) result *= a;
+        a *= a;
+        b /= 2;
+    }
+    return result;
+}
+ll power_with_mod(ll a, ll b,ll m) {
+    ll result = 1;
+    while (b) {
+        if (b&1) result =(result*a)%m;
+        a = (a*a)%m;
+        b /= 2;
+    }
+    return result;
+}
+template <typename  type>
+struct mycomp {
+    bool operator()(const type & first,const type & second) const{
+        /*
+        write whatever code you want here in order to have the wanted sorting logic,
+        for exp return first<second; : this will work as by default sorting(increasing order),
+         you can use first.first(if you are working with pair),
+         when using this function in a structure, write: mycomp<type that it will work with>
+         */
+    }
+};
+void coordinate_compress(vector<int> &initial, vector<int> &iToV, map<int , int> &vToI, int start =0 , int step =1){
+    /*
+    nst3mlouha bch ncompressiw vecteur mt3na,m3neha f 3oudh mat5dm 3ala vecteur kobro 10 7 w tjik mle,
+    n5dhou ken les indices eli 7chtna behom w nsortiwhom w nsn3ou mnhom tab s4ir fih des indices s4ar
+    en relation b les indices l7a9aniyin
+    initial yod5l b les valeurs mahomch mratbin ma3ndhom 7ata 3ala9a w yo5rj b les indices mt3 les valeurs edhoukom
+    f tab jdid
+    */
+    for (auto &x_pos : initial)
+        vToI[x_pos]=0;
+    iToV.resize(start + step * vToI.size());
+    int idx = 0;
+    for (auto &entry : vToI)
+    {
+        entry .second =start + step *idx;
+        iToV [entry .second ] =entry.first;
+        ++idx;
+    }
+    for (auto &x_pos : initial)
+        x_pos =vToI[x_pos];
+}
+bool isPrime(ll n) {
+    if (n == 1) return false;
+    if (n == 2) return true;
+    for (int i = 2; i * i <= n; ++i) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+int primeFactors(vector<int> &a,int j,int c)
+{
+    int w=0;
+    // Print the number of 2s that divide n
+    while ((a[j]>c)&&(a[j] % 2 == 0))
+    {
+        w++;
+//        cout << 2 << " ";
+        a[j] = a[j]/2;
+    }
+ 
+    // n must be odd at this point. So we can skip
+    // one element (Note i = i +2)
+    for (int i = 3; i <= sqrtl(a[j]); i = i + 2)
+    {
+        // While i divides n, print i and divide n
+        while ((a[j]>c)&&(a[j] % i == 0))
+        {
+            w++;
+//            cout << i << " ";
+            a[j] = (a[j])/i;
+        }
+    }
+ 
+    // This condition is to handle the case when n
+    // is a prime number greater than 2
+    if ((a[j]>c)&&(a[j] > 2)) {
+        w++;
+//       cout << n << " ";
+    }
+    return w;
+}
+ 
+ 
+ 
+ 
+ 
+ 
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(0);
+    int t=1;
+    cin>>t;
+    while (t--)
+    {
+        int n,time;
+        cin>>n>>time;
+        int c;
+        vector<pair<int,int>>a(n);
+        for (int i = 0; i < n; ++i) {
+            cin>>c;
+            a[i].first=c+i;
+        }
+        for (int i = 0; i < n; ++i) {
+            cin>>a[i].second;
+        }
+        set<pair<int,int>>comp;
+        for (int i = 0; i < n; ++i) {
+            if(a[i].first<=time)
+                comp.insert({a[i].second,a[i].first});
+        }
+        if(comp.empty())
+            cout<<-1<<nl;
+        else {
+            int indice;
+            auto it=comp.rbegin();
+            for (int i = 0; i < n; ++i) {
+                if((a[i].first==it->second)&&(a[i].second==it->first))
+                {
+                    indice=i;
+                    break;
+                }
+            }
+            cout << indice + 1 << nl;
+        }
+    }
+    return 0;
+}
